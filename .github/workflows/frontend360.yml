@@ -3,7 +3,7 @@ name: Deploy Frontend 360
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
