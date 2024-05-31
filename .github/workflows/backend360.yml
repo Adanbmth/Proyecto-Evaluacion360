@@ -37,6 +37,13 @@ jobs:
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 360Back
-        publish-profile: ${{ secrets.AzureWebAppPublishProfile }}
+        app-name: $360Back
+        publish-profile: |
+          <PublishData>
+            <PublishProfile
+              publishUrl="360back.scm.azurewebsites.net:443"
+              userName="$360Back"
+              userPWD="yQGP2YGumll19JQCrriiWvbvJvlu1WQnKqarAwQym3sxaxTPYcyCEZo5TQRY"
+            />
+          </PublishData>
         package: ${{ github.workspace }}/eval360/publish
