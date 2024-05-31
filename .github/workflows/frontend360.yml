@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Setup Node.js
       uses: actions/setup-node@v3.7.0
@@ -19,20 +19,20 @@ jobs:
         node-version: '18.18.0'
 
     - name: Install dependencies
-      working-directory: /eval360_Angular
+      working-directory: ./eval360_Angular
       run: npm install
 
     - name: Build
-      working-directory: /eval360_Angular
+      working-directory: ./eval360_Angular
       run: npm run build --prod
 
     - name: Index for routing
-      run: mv /eval360_Angular/dist/Evaluacion360/index.html /eval360_Angular/dist/Evaluacion360/404.html
+      run: mv ./eval360_Angular/dist/Evaluacion360/index.html ./eval360_Angular/dist/Evaluacion360/404.html
 
     - name: Deploy to Netlify
       uses: nwtgck/actions-netlify@v1.1.0
       with:
-        publish-dir: /eval360_Angular/dist/Evaluacion360
+        publish-dir: ./eval360_Angular/dist/Evaluacion360
         production-deploy: true
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
