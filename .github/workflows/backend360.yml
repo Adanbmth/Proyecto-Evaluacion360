@@ -1,0 +1,42 @@
+name: Deploy 360 backend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.202'  # Usa la versión correspondiente
+
+    - name: Restore dependencies
+      working-directory: ./eval360
+      run: dotnet restore
+
+    - name: Build
+      working-directory: ./eval360
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Run tests
+      working-directory: ./eval360
+      run: dotnet test --no-restore --verbosity normal
+
+    - name: Publish
+      working-directory: ./eval360
+      run: dotnet publish -c Release -o ${{ github.workspace }}/eval360/publish
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 360Back
+        publish-profile: ${{ secrets.AzureWebAppPublishProfile }}
+        package: ${{ github.workspace }}/eval360/publish
