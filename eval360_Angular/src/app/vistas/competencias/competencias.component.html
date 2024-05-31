@@ -1,0 +1,177 @@
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav mode="side" [(opened)]="sidebarAbierta">
+      <!-- Contenido de la barra lateral -->
+      <mat-nav-list>
+        <a mat-list-item routerLink="/escalas"><mat-icon>open_in_browser</mat-icon>  Escalas de evaluación</a>
+        <a mat-list-item routerLink="/competencias"><mat-icon>open_in_browser</mat-icon> <strong> Competencias </strong></a>
+        <a mat-list-item routerLink="/criterios"><mat-icon>open_in_browser</mat-icon>  Criterios</a>
+        <a mat-list-item href="/colaboradores"><mat-icon>open_in_browser</mat-icon>  Colaboradores</a>
+        <!-- Agrega más elementos de navegación según sea necesario -->
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <!-- Contenido de la página principal aquí -->
+      <mat-toolbar color="secondary">
+        <button mat-icon-button (click)="toggleSidebar()">
+          <mat-icon>{{ sidebarAbierta ? 'close' : 'menu' }}</mat-icon>
+        </button>
+        <span>Evaluación 360</span>
+      </mat-toolbar>
+      <div class="main-content">
+        <!-- Contenido de la página principal aquí -->
+            <div id="main" class="row">
+                <div class="col-lg-10 col-md-10">
+                    <dx-button icon="add" id="addBtn" class="addButton" (onClick)="Agregar()" text="Agregar"></dx-button>
+                    <dx-data-grid
+                        id="gridContainer"
+                        [keyExpr]="'id'"
+                        [dataSource]="competencias"
+                        [width]="'100%'"
+                        [showBorders]="true"
+                        [rowAlternationEnabled]="true"
+                        [allowColumnReordering]="true"
+                        [allowColumnResizing]="true"
+                        [columnAutoWidth]="true"
+                        [repaintChangesOnly]="true"
+                        [columnHidingEnabled]="true"
+                        (onExporting)="onExporting($event)"
+                    >
+
+                    <dxo-export [enabled]="true"></dxo-export>
+                    <dxo-paging [pageSize]="5"></dxo-paging>
+
+                    <dxo-pager
+                        [visible]="true"
+                        [showNavigationButtons]="showNavButtons">
+                    </dxo-pager>
+
+                    <dxo-search-panel
+                        [visible]="true"
+                        [highlightCaseSensitive]="true">
+                    </dxo-search-panel>
+
+                        <dxi-column dataField="id" cellTemplate="cellTemplate" width="auto" caption="Acciones" alignment="center" [allowSorting]="false" sortOrder="asc">
+                            <div *dxTemplate="let data of 'cellTemplate'">
+                                <div>
+                                    <dx-button class="editButton" icon="edit" (onClick)="guardar(data.data.id)"></dx-button>
+                                    <dx-button icon="trash" class="trashButton" (onClick)="eliminar(data.data.id)"></dx-button>
+                                </div>
+                            </div>
+                        </dxi-column>
+                        <dxi-column dataField="nombre" caption="Nombre corto" alignment="center" width="auto"></dxi-column>
+                        <dxi-column dataField="descripcion" cellTemplate="cellTemplate2" alignment="center" width="750px">
+                            <div *dxTemplate="let cellData of 'cellTemplate2'">
+                                <div class="two-line-text">{{ cellData.value }}</div>
+                            </div>
+                        </dxi-column>
+                        <dxi-column dataField="color" cellTemplate="color" alignment="center" width="70px" [allowEditing]="false">
+                            <div *dxTemplate="let col of 'color'">
+                                <div [style.width]="'auto'" [style.height]="'25px'" [style.border]="'5px solid #c2c2c2'" [style.backgroundColor]="col.value"></div>
+                            </div>
+                        </dxi-column>
+                        <dxi-column dataField="activo" cellTemplate="nueva" dataType="text" alignment="center" [allowSorting]="false" width="auto">
+                            <div *dxTemplate="let bool of 'nueva'">
+                                <div *ngIf="bool.value == true"><i class="dx-icon-check dx-icon-custom-style1"></i></div>
+                                <div *ngIf="bool.value == false"><i class="dx-icon-remove dx-icon-custom-style"></i></div>
+                            </div>
+                        </dxi-column>
+                    </dx-data-grid>
+                    <dx-popup
+                        title="Editar Competencia"
+                        [showTitle]="true"
+                        [width]="700"
+                        [height]="425"
+                        position='center'
+                        [dragEnabled]="false"
+                        [hideOnOutsideClick]="false"
+                        [showCloseButton]="false"
+                        [(visible)]="popupVisible"
+                    >
+                        <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+                        </dxo-position>
+                        <form [formGroup]="editarForm" (ngSubmit)="postForm(editarForm.value)">
+                            <div class="form_group">
+                                <div class="form-control">
+                                    <label for="nombre">Nombre corto:</label>
+                                    <input type="text" id="nombre" formControlName="nombre">
+                                </div>
+                                <div class="form-control">
+                                    <label for="descripcion">Descripción:</label>
+                                    <input type="text" id="descripcion" formControlName="descripcion">
+                                </div>
+                                <div class="form-control">
+                                    <label for="color">Color (RGB/Hex):</label>
+                                    <input type="color" id="color" formControlName="color">
+                                </div>
+                                <div class="form-control">
+                                    <label for="activo">Activo:</label>
+                                    <input type="checkbox" id="activo" formControlName="activo">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+                        </form>
+                    </dx-popup>
+                    <dx-popup
+                        title="Agregar Competencia"
+                        [showTitle]="true"
+                        [width]="700"
+                        [height]="425"
+                        position='center'
+                        [dragEnabled]="false"
+                        [hideOnOutsideClick]="false"
+                        [showCloseButton]="false"
+                        [(visible)]="popup2Visible"
+                    >
+                    <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+                    </dxo-position>
+                    <form [formGroup]="agregarForm" (ngSubmit)="postForm2(agregarForm.value)">
+                        <div class="form_group">
+                            <div class="form-control">
+                                <label for="opcion">Id:</label>
+                                <input type="number" id="id" formControlName="id" readonly>
+                            </div>
+                            <div class="form-control">
+                                <label for="nombre">Nombre corto:</label>
+                                <input type="text" id="nombre" formControlName="nombre">
+                            </div>
+                            <div class="form-control">
+                                <label for="descripcion">Descripción:</label>
+                                <input type="text" id="descripcion" formControlName="descripcion">
+                            </div>
+                            <div class="form-control">
+                                <label for="color">Color (RGB/Hex):</label>
+                                <input type="color" id="color" formControlName="color">
+                            </div>
+                            <div class="form-control">
+                                <label for="activo">Activo:</label>
+                                <input type="checkbox" id="activo" formControlName="activo">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+                    </form>
+                </dx-popup>
+                <dx-popup
+                    [showTitle]="false"
+                    [width]="350"
+                    [height]="200"
+                    position='center'
+                    [dragEnabled]="false"
+                    [hideOnOutsideClick]="false"
+                    [showCloseButton]="false"
+                    [(visible)]="deleteVisible"
+                >
+                    <div class="confirm-dialog">
+                        <div class="message">¿Estás seguro de que deseas eliminar este registro?</div>
+                        <div class="buttons">
+                        <dx-button text="Cancelar" class="btn btn-default" (onClick)="cancelar()"></dx-button>
+                        <dx-button text="Eliminar" class="btn btn-danger" (onClick)="confirmarEliminacion()"></dx-button>
+                        </div>
+                    </div>
+                </dx-popup>
+                </div>
+            </div>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

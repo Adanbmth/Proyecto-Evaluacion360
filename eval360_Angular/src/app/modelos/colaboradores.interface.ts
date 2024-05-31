@@ -1,0 +1,32 @@
+export interface ListaColaborador{
+    id?: number; 
+    nombre?: string | undefined; 
+    apellidoPaterno?: string | undefined;
+    apellidoMaterno?: string | undefined;
+    fechaNacimiento?: Date | null | string;
+    genero?: string | undefined;
+    curp?: string | undefined;
+    rfc?: string | undefined;
+    estatus?: string | undefined;
+    numeroNomina?: string | undefined;
+    estadoCivil?: string | undefined; 
+    nacionalidad?: string | undefined;
+    nss?: string | undefined;
+    tipoSangre?: string | undefined;
+    correo?: string | undefined; 
+    correoInstitucional?: string | undefined;
+    celular?: string | undefined; 
+    telefono?: string | undefined;
+    codigoPostal?: string | undefined;
+    estado?: string | undefined;
+    ciudad?: string | undefined;
+    colonia?: string | undefined;
+    calle?: string | undefined;
+    noExterior?: number;
+    noInterior?: number; 
+    usuarioERP?: boolean;
+    horarioId?: string | undefined; 
+    estudioId?: string | undefined;
+    puestoId?: string | undefined;
+    activo?: boolean;
+}

@@ -1,0 +1,77 @@
+::ng-deep .dx-datagrid-content .dx-datagrid-table .dx-row>td,::ng-deep .dx-datagrid-content .dx-datagrid-table .dx-row>tr>td{
+    vertical-align: middle
+
+}
+
+dx-button .trashbutton,dx-button .edithbutton{
+    width: 10px;
+    height: 2px;
+}
+
+::ng-deep .trashButton .dx-icon,::ng-deep .editButton .dx-icon{
+    color: blue;
+}
+
+::ng-deep .trashButton, ::ng-deep .editButton{
+    background-color: transparent;
+    margin: none;
+    border: none;
+}
+
+::ng-deep .dx-tree-view{
+    background-color: gray;
+}
+
+#main{
+    position: absolute;
+    top: 150px;
+    justify-content: center;
+}
+
+.dx-icon-custom-style{
+    font-size: 22px;
+    color: red;
+}
+
+.dx-icon-custom-style1{
+    font-size: 22px;
+    color: green;
+}
+
+/*Barra lateral*/
+
+.sidenav-container {
+    height: 100vh; /* Altura total de la ventana */
+  }
+  
+  .mat-sidenav {
+    width: 250px; /* Ancho de la barra lateral */
+  }
+  
+  .main-content {
+    padding: 20px; /* Espacio para evitar que el contenido se solape con la barra lateral */
+    height: 100%; /* Ocupa todo el espacio disponible en el contenedor de contenido */
+    background-color: white;
+  }
+
+  mat-sidenav-container .mat-drawer-content{
+    overflow: hidden;
+  }
+
+  .mat-sidenav .mat-icon{
+    position: relative;
+    top: 6px;
+  }
+
+  .two-line-text {
+    white-space: pre-wrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+  }
+
+  .datosColaborador .form-control{
+    width: auto;
+    margin: 15px;
+  }

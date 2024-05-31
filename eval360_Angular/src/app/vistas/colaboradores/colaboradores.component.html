@@ -1,0 +1,1231 @@
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav mode="side" [(opened)]="sidebarAbierta">
+      <!-- Contenido de la barra lateral -->
+      <mat-nav-list>
+        <a mat-list-item routerLink="/escalas"><mat-icon>open_in_browser</mat-icon>  Escalas de evaluación </a>
+        <a mat-list-item routerLink="/competencias"><mat-icon>open_in_browser</mat-icon>  Competencias</a>
+        <a mat-list-item routerLink="/criterios"><mat-icon>open_in_browser</mat-icon>  Criterios</a>
+        <a mat-list-item href="/colaboradores"><strong><mat-icon>open_in_browser</mat-icon>  Colaboradores</strong></a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar color="secondary">
+            <button mat-icon-button (click)="toggleSidebar()">
+            <mat-icon>{{ sidebarAbierta ? 'close' : 'menu' }}</mat-icon>
+            </button>
+            <span>Evaluación 360</span>
+        </mat-toolbar>
+        <div class="main-content">
+        <!-- Contenido de la página principal aquí -->
+            <div id="main" class="row">
+                <div class="col-lg-10 col-md-10">
+                    <dx-button icon="add" id="addBtn" class="addButton" (onClick)="colaboradorForm()" text="Agregar"></dx-button>
+                    <dx-data-grid
+                        id="gridContainer"
+                        [keyExpr]="'id'"
+                        [dataSource]="colaboradores"
+                        [width]="'100%'"
+                        [showBorders]="true"
+                        [rowAlternationEnabled]="true"
+                        [allowColumnResizing]="true"
+                        [columnHidingEnabled]="true"
+                        [repaintChangesOnly]="true"
+                        (onExporting)="onExporting($event)"
+                    >
+
+                    <dxo-export [enabled]="true"></dxo-export>
+                    <dxo-paging [pageSize]="5"></dxo-paging>
+
+                    <dxo-pager
+                        [visible]="true"
+                        [showNavigationButtons]="showNavButtons">
+                    </dxo-pager>
+
+                    <dxo-search-panel
+                        [visible]="true"
+                        [highlightCaseSensitive]="true">
+                    </dxo-search-panel>
+
+                        <dxi-column dataField="id" cellTemplate="cellTemplate" width="auto" caption="Acciones" alignment="center" [allowSorting]="false" sortOrder="asc">
+                            <div *dxTemplate="let data of 'cellTemplate'">
+                                <div>
+                                    <dx-button class="editButton" icon="edit" (onClick)="colaboradorEditar(data.data.id)"></dx-button>
+                                    <dx-button icon="trash" class="trashButton" (onClick)="eliminarColaborador(data.data.id)"></dx-button>
+                                </div>
+                            </div>
+                        </dxi-column>
+                        <dxi-column dataField="numeroNomina" width="auto" caption="N° Nomina"></dxi-column>
+                        <dxi-column dataField="nombre" dataType="text" width="auto"></dxi-column>
+                        <dxi-column dataField="apellidoPaterno" dataType="text" width="auto"></dxi-column>
+                        <dxi-column dataField="apellidoMaterno" dataType="text" width="auto"></dxi-column>
+                        <dxi-column dataField="fechaNacimiento" dataType="date" width="auto"></dxi-column>
+                        <dxi-column dataField="rfc" dataType="text" alignment="center" width="auto" caption="RFC"></dxi-column>
+                        <dxi-column dataField="curp" dataType="text" alignment="center" width="auto" caption="CURP"></dxi-column>
+                        <dxi-column dataField="celular" dataType="text" alignment="center" width="auto" caption="Tel.celular"></dxi-column>
+                        <dxi-column dataField="correo" dataType="text" alignment="center" width="auto"></dxi-column>
+                        <dxi-column dataField="activo" cellTemplate="nueva" dataType="text" alignment="center" [allowSorting]="false" width="auto">
+                            <div *dxTemplate="let bool of 'nueva'">
+                                <div *ngIf="bool.value == true"><i class="dx-icon-check dx-icon-custom-style1"></i></div>
+                                <div *ngIf="bool.value == false"><i class="dx-icon-remove dx-icon-custom-style"></i></div>
+                            </div>
+                        </dxi-column>
+                    </dx-data-grid>
+
+<!-----------------------------------------------Editar el registro de colaboradores----------------------------------------------->
+<dx-popup
+title="Editar Colaborador"
+[showTitle]="true"
+[width]="1480"
+[height]="720"
+position='center'
+[dragEnabled]="false"
+[hideOnOutsideClick]="false"
+[showCloseButton]="false"
+[(visible)]="EditarColaborador"
+>
+<mat-tab-group dynamicHeight [(selectedIndex)]="selectedIndex" [disableRipple]>
+    <mat-tab label="Colaborador">
+        <div class="datosColaborador">                   
+            <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+            </dxo-position>
+            <form [formGroup]="editarColaborador" (ngSubmit)="colaboradorPut(editarColaborador.value)">
+                <div class="form_group row">
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" formControlName="nombre">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="apellidoPaterno">Apellido Paterno:</label>
+                        <input type="text" id="apellidoPaterno" formControlName="apellidoPaterno">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="apellidoMaterno">Apellido Materno:</label>
+                        <input type="text" id="apellidoMaterno" formControlName="apellidoMaterno">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                        <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="genero">Género:</label>
+                        <input type="text" id="genero" formControlName="genero">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="curp">CURP:</label>
+                        <input type="text" id="curp" formControlName="curp">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="rfc">RFC:</label>
+                        <input type="text" id="rfc" formControlName="rfc">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="numeroNomina">Número de Nómina:</label>
+                        <input type="text" id="numeroNomina" formControlName="numeroNomina">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="estadoCivil">Estado Civil:</label>
+                        <input type="text" id="estadoCivil" formControlName="estadoCivil">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="nacionalidad">Nacionalidad:</label>
+                        <input type="text" id="nacionalidad" formControlName="nacionalidad">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="nss">NSS:</label>
+                        <input type="text" id="nss" formControlName="nss">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="tipoSangre">Tipo de Sangre:</label>
+                        <input type="text" id="tipoSangre" formControlName="tipoSangre">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="correo">Correo:</label>
+                        <input type="email" id="correo" formControlName="correo">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="correoInstitucional">Correo Institucional:</label>
+                        <input type="email" id="correoInstitucional" formControlName="correoInstitucional">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="celular">Celular:</label>
+                        <input type="text" id="celular" formControlName="celular">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="telefono">Teléfono:</label>
+                        <input type="text" id="telefono" formControlName="telefono">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="codigoPostal">Código Postal:</label>
+                        <input type="text" id="codigoPostal" formControlName="codigoPostal">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="estado">Estado:</label>
+                        <input type="text" id="estado" formControlName="estado">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="ciudad">Ciudad:</label>
+                        <input type="text" id="ciudad" formControlName="ciudad">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="colonia">Colonia:</label>
+                        <input type="text" id="colonia" formControlName="colonia">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="calle">Calle:</label>
+                        <input type="text" id="calle" formControlName="calle">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="noExterior">Número Exterior:</label>
+                        <input type="number" id="noExterior" formControlName="noExterior">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="noInterior">Número Interior:</label>
+                        <input type="number" id="noInterior" formControlName="noInterior">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="usuarioERP">Usuario ERP:</label>
+                        <input type="checkbox" id="usuarioERP" formControlName="usuarioERP">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3" style="display: none;">
+                        <label for="horarioId">Horario:</label>
+                        <input type="text" id="horarioId" formControlName="horarioId">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3" style="display: none;">
+                        <label for="estudioId">Estudio:</label>
+                        <input type="text" id="estudioId" formControlName="estudioId">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3" style="display: none;">
+                        <label for="puestoId">Puesto:</label>
+                        <input type="text" id="puestoId" formControlName="puestoId">
+                    </div>
+                    <div class="form-control col-lg-3 col-md-3 col-3">
+                        <label for="activo">Activo:</label>
+                        <input type="checkbox" id="activo" formControlName="activo">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Siguiente</button>
+                <button type="button" class="btn btn-secondary" (click)="cancelarPrinc()">Cancelar</button>
+            </form>
+        </div>
+    </mat-tab>
+
+    <!-- Seccion del horario del colaborador -->
+    <mat-tab label="Horario">
+        <div class="horario">
+            <dx-button icon="add" id="addBtn" class="addButton" (onClick)="horarioForm()" text="Agregar"></dx-button><br><br>
+            <dx-data-grid
+            id="gridHorario"
+            [keyExpr]="'id'"
+            [dataSource]="horarios"
+            [width]="'100%'"
+            [showBorders]="true"
+            [rowAlternationEnabled]="true"
+            [columnHidingEnabled]="true"
+            [repaintChangesOnly]="true"
+            >
+
+            <dxo-paging [pageSize]="5"></dxo-paging>
+
+            <dxo-pager
+                [visible]="true"
+                [showNavigationButtons]="showNavButtons">
+            </dxo-pager>
+
+                <dxi-column dataField="id" cellTemplate="cellTemplate" width="auto" caption="Acciones" alignment="center" [allowSorting]="false" sortOrder="asc">
+                    <div *dxTemplate="let data of 'cellTemplate'">
+                        <div>
+                            <dx-button icon="trash" class="trashButton" (onClick)="eliminarHorario(data.data.id)"></dx-button>
+                        </div>
+                    </div>
+                </dxi-column>
+                <dxi-column dataField="ciclo" dataType="text" alignment="center" width="auto" caption="Ciclo Escolar"></dxi-column>
+                <dxi-column dataField="semestre" dataType="text" alignment="center" caption="Semestre"></dxi-column>
+                <dxi-column dataField="lunEnt" dataType="number" alignment="center" width="auto" caption="LUN Ent."></dxi-column>
+                <dxi-column dataField="lunSal" dataType="number" alignment="center" width="auto" caption="LUN Sal."></dxi-column>
+                <dxi-column dataField="marEnt" dataType="number" alignment="center" width="auto" caption="MAR Ent."></dxi-column>
+                <dxi-column dataField="marSal" dataType="number" alignment="center" width="auto" caption="MAR Sal."></dxi-column>
+                <dxi-column dataField="mieEnt" dataType="number" alignment="center" width="auto" caption="MIE Ent."></dxi-column>
+                <dxi-column dataField="mieSal" dataType="number" alignment="center" width="auto" caption="MIE Sal."></dxi-column>
+                <dxi-column dataField="jueEnt" dataType="number" alignment="center" width="auto" caption="JUE Ent."></dxi-column>
+                <dxi-column dataField="jueSal" dataType="number" alignment="center" width="auto" caption="JUE Sal."></dxi-column>
+                <dxi-column dataField="vieEnt" dataType="number" alignment="center" width="auto" caption="VIE Ent."></dxi-column>
+                <dxi-column dataField="vieSal" dataType="number" alignment="center" width="auto" caption="VIE Sal."></dxi-column>
+                <dxi-column dataField="ultimaMod" dataType="date" alignment="center" caption="Ultima modificación"></dxi-column>
+                <dxi-column dataField="modificadoPor" dataType="text" caption="Modificado por"></dxi-column>
+            </dx-data-grid>
+            <dx-button id="addBtn" class="btn btn-primary" (onClick)="nextTab()" text="Siguiente"></dx-button>
+            <dx-button text="Cancelar" class="btn btn-secondary" (onClick)="cancelarPrinc()"></dx-button>
+
+
+            <!-- popup del horario para agregar -->
+            <dx-popup
+            title="Agregar horario"
+            [showTitle]="true"
+            [width]="700"
+            [height]="425"
+            position='center'
+            [dragEnabled]="false"
+            [hideOnOutsideClick]="false"
+            [showCloseButton]="false"
+            [(visible)]="AgregarHorario"
+            >
+            <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+            </dxo-position>
+            <form [formGroup]="agregarHorario" (ngSubmit)="nuevoHorario(agregarHorario.value)">
+                <div class="container">
+                    <div class="form_group row">
+                        <div class="form-control col-lg-3 col-md-3 col-3">
+                            <label for="id">Id:</label>
+                            <input type="number" id="id" formControlName="id" readonly>
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="ciclo">Ciclo:</label>
+                            <input type="text" id="ciclo" formControlName="ciclo">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="semestre">VSemestre:</label>
+                            <input type="text" id="semestre" formControlName="semestre">
+                        </div> 
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="lunEnt">Entrada Lunes:</label>
+                            <input type="datetime" id="lunEnt" formControlName="lunEnt">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="lunSal">Salida Lunes:</label>
+                            <input type="datetime" id="lunSal" formControlName="lunSal">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="marEnt">Entrada Martes:</label>
+                            <input type="datetime" id="marEnt" formControlName="marEnt">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="marSal">Salida Martes:</label>
+                            <input type="datetime" id="marSal" formControlName="marSal">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="mieEnt">Entrada Miercoles:</label>
+                            <input type="datetime" id="mieEnt" formControlName="mieEnt">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="mieSal">Salida Miercoles:</label>
+                            <input type="datetime" id="mieSal" formControlName="mieSal">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="jueEnt">Entrada Jueves:</label>
+                            <input type="datetime" id="jueEnt" formControlName="jueEnt">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="jueSal">Salida Jueves:</label>
+                            <input type="datetime" id="jueSal" formControlName="jueSal">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="vieEnt">Entrada Viernes:</label>
+                            <input type="datetime" id="vieEnt" formControlName="vieEnt">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="vieSal">Salida Viernes:</label>
+                            <input type="datetime" id="vieSal" formControlName="vieSal">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="ultimaMod">Ultima modificación:</label>
+                            <input type="date" id="ultimaMod" formControlName="ultimaMod">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="modificadoPor">Modificado Por:</label>
+                            <input type="text" id="modificadoPor" formControlName="modificadoPor">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3" style="display: none;">
+                            <label for="colaborador">Colaborador</label>
+                            <input type="number" id="colaborador" formControlName="colaborador">
+                        </div>
+                    </div>
+                </div>    
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" (click)="cancelarAgregar()">Cancelar</button>
+            </form>
+            </dx-popup>
+            <!-- Eliminar horario -->
+            <dx-popup
+                [showTitle]="false"
+                [width]="350"
+                [height]="200"
+                position='center'
+                [dragEnabled]="false"
+                [hideOnOutsideClick]="false"
+                [showCloseButton]="false"
+                [(visible)]="deleteHorario"
+            >
+                <div class="confirm-dialog">
+                    <div class="message">¿Estás seguro de que deseas eliminar este horario?</div>
+                    <div class="buttons">
+                        <dx-button text="Cancelar" class="btn btn-default" (onClick)="cancelarEliminar()"></dx-button>
+                        <dx-button text="Eliminar" class="btn btn-danger" (onClick)="confirmarEliminacion('deleteHorario')"></dx-button>
+                    </div>
+                </div>
+            </dx-popup>
+        </div> 
+    </mat-tab>
+
+    <!-- Seccion de estudios del colaborador -->
+    <mat-tab label="Estudios">
+        <dx-button icon="add" id="addBtn" class="addButton" (onClick)="estudioForm()" text="Agregar"></dx-button><br><br>
+        <div class="estudios">
+            <dx-data-grid
+            id="EstudiosGrid"
+            [keyExpr]="'id'"
+            [dataSource]="estudios"
+            [width]="'100%'"
+            [showBorders]="true"
+            [rowAlternationEnabled]="true"
+            [allowColumnResizing]="true"
+            [columnHidingEnabled]="true"
+            [repaintChangesOnly]="true"
+            >
+                <dxo-paging [pageSize]="5"></dxo-paging>
+
+                <dxo-pager
+                    [visible]="true"
+                    [showNavigationButtons]="showNavButtons">
+                </dxo-pager>
+
+                <dxi-column dataField="id" cellTemplate="cellTemplate" width="auto" caption="Acciones" alignment="center" [allowSorting]="false" sortOrder="asc">
+                    <div *dxTemplate="let data of 'cellTemplate'">
+                        <div>
+                            <dx-button class="editButton" icon="edit" (onClick)="estudioEditar(data.data.id)"></dx-button>
+                            <dx-button icon="trash" class="trashButton" (onClick)="eliminarEstudio(data.data.id)"></dx-button>
+                        </div>
+                    </div>
+                </dxi-column>
+                <dxi-column dataField="nivelEstudio" dataType="text" caption="Nivel de estudio"></dxi-column>
+                <dxi-column dataField="titulo" dataType="text" caption="Título"></dxi-column>
+                <dxi-column dataField="institucion" dataType="text" caption="Institución Educativa"></dxi-column>
+                <dxi-column dataField="estatus" dataType="text"></dxi-column>
+                <dxi-column dataField="cedula" dataType="text" caption="Cédula Profesional"></dxi-column>                                        
+            </dx-data-grid>
+            <dx-button id="addBtn" class="btn btn-primary" (onClick)="nextTab()" text="Siguiente"></dx-button>
+            <dx-button text="Cancelar" class="btn btn-secondary" (onClick)="cancelarPrinc()"></dx-button>
+        </div>
+
+        <dx-popup
+            title="Editar estudio"
+            [showTitle]="true"
+            [width]="850"
+            [height]="525"
+            position='center'
+            [dragEnabled]="false"
+            [hideOnOutsideClick]="false"
+            [showCloseButton]="false"
+            [(visible)]="EditarEstudio"
+        >
+            <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+            </dxo-position>
+            <form [formGroup]="editarEstudio" (ngSubmit)="estudioPut(editarEstudio.value)">
+                <div class="container">
+                    <div class="form_group row">
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="nivelEstudio">Nivel de estudio:</label>
+                            <input type="text" id="nivelEstudio" formControlName="nivelEstudio">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="titulo">Titulo:</label>
+                            <input type="text" id="titulo" formControlName="titulo">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="institucion">Institución Educativa:</label>
+                            <input type="texto" id="institucion" formControlName="institucion">
+                        </div> 
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="estatus">Estatus:</label>
+                            <input type="texto" id="estatus" formControlName="estatus">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="cedula">Cédula Profesional:</label>
+                            <input type="texto" id="cedula" formControlName="cedula">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3" style="display: none;">
+                            <label for="colaborador">Colaborador:</label>
+                            <input type="number" id="colaborador" formControlName="colaborador">
+                        </div>
+                    </div>
+                </div>    
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" (click)="cancelarAgregar()">Cancelar</button>
+            </form>
+        </dx-popup>
+
+        <!-- Agregar estudio -->
+        <dx-popup
+            title="Agregar estudio"
+            [showTitle]="true"
+            [width]="850"
+            [height]="525"
+            position='center'
+            [dragEnabled]="false"
+            [hideOnOutsideClick]="false"
+            [showCloseButton]="false"
+            [(visible)]="AgregarEstudio"
+        >
+            <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+            </dxo-position>
+            <form [formGroup]="agregarEstudio" (ngSubmit)="nuevoEstudio(agregarEstudio.value)">
+                <div class="container">
+                    <div class="form_group row">
+                        <div class="form-control">
+                            <label for="id">Id:</label>
+                            <input type="number" id="id" formControlName="id" readonly>
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="nivelEstudio">Nivel de estudio:</label>
+                            <input type="text" id="nivelEstudio" formControlName="nivelEstudio">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="titulo">Titulo:</label>
+                            <input type="text" id="titulo" formControlName="titulo">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="institucion">Institución Educativa:</label>
+                            <input type="texto" id="institucion" formControlName="institucion">
+                        </div> 
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="estatus">Estatus:</label>
+                            <input type="texto" id="estatus" formControlName="estatus">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="cedula">Cédula Profesional:</label>
+                            <input type="texto" id="cedula" formControlName="cedula">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3" style="display: none;">
+                            <label for="colaborador">Colaborador:</label>
+                            <input type="number" id="colaborador" formControlName="colaborador">
+                        </div>
+                    </div>
+                </div>    
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" (click)="cancelarAgregar()">Cancelar</button>
+            </form>
+        </dx-popup>
+
+    <!-- Eliminar estudio -->
+        <dx-popup
+            [showTitle]="false"
+            [width]="350"
+            [height]="200"
+            position='center'
+            [dragEnabled]="false"
+            [hideOnOutsideClick]="false"
+            [showCloseButton]="false"
+            [(visible)]="deleteEstudio"
+        >
+            <div class="confirm-dialog">
+                <div class="message">¿Estás seguro de que deseas eliminar este estudio?</div>
+                <div class="buttons">
+                    <dx-button text="Cancelar" class="btn btn-default" (onClick)="cancelarEliminar()"></dx-button>
+                    <dx-button text="Eliminar" class="btn btn-danger" (onClick)="confirmarEliminacion('deleteEstudio')"></dx-button>
+                </div>
+            </div>
+        </dx-popup>
+    </mat-tab>
+    <mat-tab label="Puestos">
+        <div class="puestos">
+            <dx-button icon="add" id="addBtn" class="addButton" (onClick)="puestoForm()" text="Agregar"></dx-button><br><br>
+            <dx-data-grid
+                id="gridContainer"
+                [keyExpr]="'id'"
+                [dataSource]="puestos"
+                [width]="'100%'"
+                [showBorders]="true"
+                [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true"
+                [columnHidingEnabled]="true"
+                [repaintChangesOnly]="true"
+            >
+
+            <dxo-paging [pageSize]="5"></dxo-paging>
+
+            <dxo-pager
+                [visible]="true"
+                [showNavigationButtons]="showNavButtons">
+            </dxo-pager>
+
+                <dxi-column dataField="id" cellTemplate="cellTemplate" width="auto" caption="Acciones" alignment="center" [allowSorting]="false" sortOrder="asc">
+                    <div *dxTemplate="let data of 'cellTemplate'">
+                        <div>
+                            <dx-button icon="trash" class="trashButton" (onClick)="eliminarPuesto(data.data.id)"></dx-button>
+                        </div>
+                    </div>
+                </dxi-column>
+                <dxi-column dataField="puestoNombre" dataType="text" caption="Puesto"></dxi-column>
+                <dxi-column dataField="puestoSuperior" dataType="text" width="auto" caption="Puesto Superior"></dxi-column>
+                <dxi-column dataField="fechaAsignacion" dataType="date"width="auto" ></dxi-column>
+                <dxi-column dataField="asignadoPor" dataType="texto" caption="Asignado Por"></dxi-column>
+                <dxi-column dataField="antiguedad" dataType="texto" caption="Antiguedad"></dxi-column>
+            </dx-data-grid>
+            <dx-button id="addBtn" class="btn btn-primary" (onClick)="nextTab()" (onClick)="cancelarPrinc()" text="Guardar"></dx-button>
+            <dx-button text="Cancelar" class="btn btn-secondary" (onClick)="cancelarPrinc()"></dx-button>
+
+            <dx-popup
+            title="Agregar puesto"
+            [showTitle]="true"
+            [width]="850"
+            [height]="525"
+            position='center'
+            [dragEnabled]="false"
+            [hideOnOutsideClick]="false"
+            [showCloseButton]="false"
+            [(visible)]="AgregarPuesto"
+        >
+            <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+            </dxo-position>
+            <form [formGroup]="agregarPuesto" (ngSubmit)="nuevoPuesto(agregarPuesto.value)">
+                <div class="container">
+                    <div class="form_group row">
+                        <div class="form-control">
+                            <label for="id">Id:</label>
+                            <input type="number" id="id" formControlName="id" readonly>
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="puestoNombre">Puesto:</label>
+                            <input type="text" id="puestoNombre" formControlName="puestoNombre">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="puestoSuperior">Puesto Superior:</label>
+                            <input type="text" id="puestoSuperior" formControlName="puestoSuperior">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="fechaAsignacion">Fecha de asignación:</label>
+                            <input type="date" id="fechaAsignacion" formControlName="fechaAsignacion">
+                        </div> 
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="asignadoPor">Asignado Por:</label>
+                            <input type="text" id="asignadoPor" formControlName="asignadoPor">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3">
+                            <label for="antiguedad">Antiguedad:</label>
+                            <input type="text" id="antiguedad" formControlName="antiguedad">
+                        </div>
+                        <div class="form-control col-lg-3 col-md-3" style="display: none;">
+                            <label for="colaboradores">Colaborador:</label>
+                            <input type="number" id="colaborador" formControlName="colaborador">
+                        </div>
+                    </div>
+                </div>    
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" (click)="cancelarAgregar()">Cancelar</button>
+            </form>  
+        </dx-popup>
+
+        <dx-popup
+        [showTitle]="false"
+        [width]="350"
+        [height]="200"
+        position='center'
+        [dragEnabled]="false"
+        [hideOnOutsideClick]="false"
+        [showCloseButton]="false"
+        [(visible)]="deletePuesto"
+    >
+        <div class="confirm-dialog">
+            <div class="message">¿Estás seguro de que deseas eliminar este puesto?</div>
+            <div class="buttons">
+                <dx-button text="Cancelar" class="btn btn-default" (onClick)="cancelarEliminar()"></dx-button>
+                <dx-button text="Eliminar" class="btn btn-danger" (onClick)="confirmarEliminacion('deletePuesto')"></dx-button>
+            </div>
+        </div>
+    </dx-popup>
+        </div>
+    </mat-tab>
+</mat-tab-group>
+</dx-popup>
+
+<!-------------------------------------------- Agregar registros de las 4 secciones ---------------------------------------------->
+                    <dx-popup
+                        title="Agregar Colaborador"
+                        [showTitle]="true"
+                        [width]="1480"
+                        [height]="720"
+                        position='center'
+                        [dragEnabled]="false"
+                        [hideOnOutsideClick]="false"
+                        [showCloseButton]="false"
+                        [(visible)]="AgregarColaborador"
+                    >
+                        <mat-tab-group dynamicHeight [(selectedIndex)]="selectedIndex">
+                            <mat-tab label="Colaborador">
+                                <div class="datosColaborador">                   
+                                    <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+                                    </dxo-position>
+                                    <form [formGroup]="agregarColaborador" (ngSubmit)="nuevoColaborador(agregarColaborador.value)">
+                                        <div class="form_group row">
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="id">Id:</label>
+                                                <input type="number" id="id" formControlName="id" readonly>
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="nombre">Nombre:</label>
+                                                <input type="text" id="nombre" formControlName="nombre">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="apellidoPaterno">Apellido Paterno:</label>
+                                                <input type="text" id="apellidoPaterno" formControlName="apellidoPaterno">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="apellidoMaterno">Apellido Materno:</label>
+                                                <input type="text" id="apellidoMaterno" formControlName="apellidoMaterno">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                                                <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="genero">Género:</label>
+                                                <input type="text" id="genero" formControlName="genero">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="curp">CURP:</label>
+                                                <input type="text" id="curp" formControlName="curp">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="rfc">RFC:</label>
+                                                <input type="text" id="rfc" formControlName="rfc">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="numeroNomina">Número de Nómina:</label>
+                                                <input type="text" id="numeroNomina" formControlName="numeroNomina">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="estadoCivil">Estado Civil:</label>
+                                                <input type="text" id="estadoCivil" formControlName="estadoCivil">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="nacionalidad">Nacionalidad:</label>
+                                                <input type="text" id="nacionalidad" formControlName="nacionalidad">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="nss">NSS:</label>
+                                                <input type="text" id="nss" formControlName="nss">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="tipoSangre">Tipo de Sangre:</label>
+                                                <input type="text" id="tipoSangre" formControlName="tipoSangre">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="correo">Correo:</label>
+                                                <input type="email" id="correo" formControlName="correo">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="correoInstitucional">Correo Institucional:</label>
+                                                <input type="email" id="correoInstitucional" formControlName="correoInstitucional">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="celular">Celular:</label>
+                                                <input type="text" id="celular" formControlName="celular">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="telefono">Teléfono:</label>
+                                                <input type="text" id="telefono" formControlName="telefono">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="codigoPostal">Código Postal:</label>
+                                                <input type="text" id="codigoPostal" formControlName="codigoPostal">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="estado">Estado:</label>
+                                                <input type="text" id="estado" formControlName="estado">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="ciudad">Ciudad:</label>
+                                                <input type="text" id="ciudad" formControlName="ciudad">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="colonia">Colonia:</label>
+                                                <input type="text" id="colonia" formControlName="colonia">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="calle">Calle:</label>
+                                                <input type="text" id="calle" formControlName="calle">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="noExterior">Número Exterior:</label>
+                                                <input type="number" id="noExterior" formControlName="noExterior">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="noInterior">Número Interior:</label>
+                                                <input type="number" id="noInterior" formControlName="noInterior">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="usuarioERP">Usuario ERP:</label>
+                                                <input type="checkbox" id="usuarioERP" formControlName="usuarioERP">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3" style="display: none;">
+                                                <label for="horarioId">Horario:</label>
+                                                <input type="text" id="horarioId" formControlName="horarioId">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3" style="display: none;">
+                                                <label for="estudioId">Estudio:</label>
+                                                <input type="text" id="estudioId" formControlName="estudioId">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3" style="display: none;">
+                                                <label for="puestoId">Puesto:</label>
+                                                <input type="text" id="puestoId" formControlName="puestoId">
+                                            </div>
+                                            <div class="form-control col-lg-3 col-md-3 col-3">
+                                                <label for="activo">Activo:</label>
+                                                <input type="checkbox" id="activo" formControlName="activo">
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Siguiente</button>
+                                        <button type="button" class="btn btn-secondary" (click)="cancelarPrinc()">Cancelar</button>
+                                    </form>
+                                </div>
+                            </mat-tab>
+
+                            <!-- Seccion del horario del colaborador -->
+                            <mat-tab label="Horario">
+                                <div class="horario">
+                                    <dx-button icon="add" id="addBtn" class="addButton" (onClick)="horarioForm()" text="Agregar"></dx-button><br><br>
+                                    <dx-data-grid
+                                    id="gridHorario"
+                                    [keyExpr]="'id'"
+                                    [dataSource]="horarios"
+                                    [width]="'100%'"
+                                    [showBorders]="true"
+                                    [rowAlternationEnabled]="true"
+                                    [columnHidingEnabled]="true"
+                                    [repaintChangesOnly]="true"
+                                    >
+
+                                    <dxo-paging [pageSize]="5"></dxo-paging>
+
+                                    <dxo-pager
+                                        [visible]="true"
+                                        [showNavigationButtons]="showNavButtons">
+                                    </dxo-pager>
+
+                                        <dxi-column dataField="id" cellTemplate="cellTemplate" width="auto" caption="Acciones" alignment="center" [allowSorting]="false" sortOrder="asc">
+                                            <div *dxTemplate="let data of 'cellTemplate'">
+                                                <div>
+                                                    <dx-button icon="trash" class="trashButton" (onClick)="eliminarHorario(data.data.id)"></dx-button>
+                                                </div>
+                                            </div>
+                                        </dxi-column>
+                                        <dxi-column dataField="ciclo" dataType="text" alignment="center" width="auto" caption="Ciclo Escolar"></dxi-column>
+                                        <dxi-column dataField="semestre" dataType="text" alignment="center" caption="Semestre"></dxi-column>
+                                        <dxi-column dataField="lunEnt" dataType="number" alignment="center" width="auto" caption="LUNEnt."></dxi-column>
+                                        <dxi-column dataField="lunSal" dataType="number" alignment="center" width="auto" caption="LUNSal."></dxi-column>
+                                        <dxi-column dataField="marEnt" dataType="number" alignment="center" width="auto" caption="MAREnt."></dxi-column>
+                                        <dxi-column dataField="marSal" dataType="number" alignment="center" width="auto" caption="MARSal."></dxi-column>
+                                        <dxi-column dataField="mieEnt" dataType="number" alignment="center" width="auto" caption="MIEEnt."></dxi-column>
+                                        <dxi-column dataField="mieSal" dataType="number" alignment="center" width="auto" caption="MIESal."></dxi-column>
+                                        <dxi-column dataField="jueEnt" dataType="number" alignment="center" width="auto" caption="JUEEnt."></dxi-column>
+                                        <dxi-column dataField="jueSal" dataType="number" alignment="center" width="auto" caption="JUESal."></dxi-column>
+                                        <dxi-column dataField="vieEnt" dataType="number" alignment="center" width="auto" caption="VIEEnt."></dxi-column>
+                                        <dxi-column dataField="vieSal" dataType="number" alignment="center" width="auto" caption="VIESal."></dxi-column>
+                                        <dxi-column dataField="ultimaMod" dataType="date" alignment="center" caption="Ultima modificación"></dxi-column>
+                                        <dxi-column dataField="modificadoPor" dataType="text" caption="Modificado por"></dxi-column>
+                                    </dx-data-grid>
+                                    <dx-button id="addBtn" class="btn btn-primary" (onClick)="nextTab()" text="Siguiente"></dx-button>
+                                    <dx-button text="Cancelar" class="btn btn-secondary" (onClick)="cancelarPrinc()"></dx-button>
+                                    <!-- popup del horario para agregar -->
+
+                                    <dx-popup
+                                    title="Agregar horario"
+                                    [showTitle]="true"
+                                    [width]="700"
+                                    [height]="425"
+                                    position='center'
+                                    [dragEnabled]="false"
+                                    [hideOnOutsideClick]="false"
+                                    [showCloseButton]="false"
+                                    [(visible)]="AgregarHorario"
+                                    >
+                                    <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+                                    </dxo-position>
+                                    <form [formGroup]="agregarHorario" (ngSubmit)="nuevoHorario(agregarHorario.value)">
+                                        <div class="container">
+                                            <div class="form_group row">
+                                                <div class="form-control col-lg-3 col-md-3 col-3">
+                                                    <label for="id">Id:</label>
+                                                    <input type="number" id="id" formControlName="id" readonly>
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="ciclo">Ciclo:</label>
+                                                    <input type="text" id="ciclo" formControlName="ciclo">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="semestre">VSemestre:</label>
+                                                    <input type="text" id="semestre" formControlName="semestre">
+                                                </div> 
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="lunEnt">Entrada Lunes:</label>
+                                                    <input type="number" id="lunEnt" formControlName="lunEnt">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="lunSal">Salida Lunes:</label>
+                                                    <input type="number" id="lunSal" formControlName="lunSal">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="marEnt">Entrada Martes:</label>
+                                                    <input type="number" id="marEnt" formControlName="marEnt">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="marSal">Salida Martes:</label>
+                                                    <input type="number" id="marSal" formControlName="marSal">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="mieEnt">Entrada Miercoles:</label>
+                                                    <input type="number" id="mieEnt" formControlName="mieEnt">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="mieSal">Salida Miercoles:</label>
+                                                    <input type="number" id="mieSal" formControlName="mieSal">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="jueEnt">Entrada Jueves:</label>
+                                                    <input type="number" id="jueEnt" formControlName="jueEnt">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="jueSal">Salida Jueves:</label>
+                                                    <input type="number" id="jueSal" formControlName="jueSal">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="vieEnt">Entrada Viernes:</label>
+                                                    <input type="number" id="vieEnt" formControlName="vieEnt">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="vieSal">Salida Viernes:</label>
+                                                    <input type="number" id="vieSal" formControlName="vieSal">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="ultimaMod">Ultima modificación:</label>
+                                                    <input type="date" id="ultimaMod" formControlName="ultimaMod">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="modificadoPor">Modificado Por:</label>
+                                                    <input type="text" id="modificadoPor" formControlName="modificadoPor">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3" style="display: none;">
+                                                    <label for="colaborador">Colaborador</label>
+                                                    <input type="number" id="colaborador" formControlName="colaborador">
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                        <button type="button" class="btn btn-secondary" (click)="cancelarAgregar()">Cancelar</button>
+                                    </form>
+                                    </dx-popup>
+                                    <!-- Eliminar horario -->
+                                    <dx-popup
+                                        [showTitle]="false"
+                                        [width]="350"
+                                        [height]="200"
+                                        position='center'
+                                        [dragEnabled]="false"
+                                        [hideOnOutsideClick]="false"
+                                        [showCloseButton]="false"
+                                        [(visible)]="deleteHorario"
+                                    >
+                                        <div class="confirm-dialog">
+                                            <div class="message">¿Estás seguro de que deseas eliminar este horario?</div>
+                                            <div class="buttons">
+                                                <dx-button text="Cancelar" class="btn btn-default" (onClick)="cancelarEliminar()"></dx-button>
+                                                <dx-button text="Eliminar" class="btn btn-danger" (onClick)="confirmarEliminacion('deleteHorario')"></dx-button>
+                                            </div>
+                                        </div>
+                                    </dx-popup>
+                                </div> 
+                            </mat-tab>
+
+                            <!-- Seccion de estudios del colaborador -->
+                            <mat-tab label="Estudios">
+                                <dx-button icon="add" id="addBtn" class="addButton" (onClick)="estudioForm()" text="Agregar"></dx-button><br><br>
+                                <div class="estudios">
+                                    <dx-data-grid
+                                    id="EstudiosGrid"
+                                    [keyExpr]="'id'"
+                                    [dataSource]="estudios"
+                                    [width]="'100%'"
+                                    [showBorders]="true"
+                                    [rowAlternationEnabled]="true"
+                                    [allowColumnResizing]="true"
+                                    [columnHidingEnabled]="true"
+                                    [repaintChangesOnly]="true"
+                                    >
+                                        <dxo-paging [pageSize]="5"></dxo-paging>
+
+                                        <dxo-pager
+                                            [visible]="true"
+                                            [showNavigationButtons]="showNavButtons">
+                                        </dxo-pager>
+
+                                        <dxi-column dataField="id" cellTemplate="cellTemplate" width="auto" caption="Acciones" alignment="center" [allowSorting]="false" sortOrder="asc">
+                                            <div *dxTemplate="let data of 'cellTemplate'">
+                                                <div>
+                                                    <dx-button class="editButton" icon="edit" (onClick)="estudioEditar(data.data.id)"></dx-button>
+                                                    <dx-button icon="trash" class="trashButton" (onClick)="eliminarEstudio(data.data.id)"></dx-button>
+                                                </div>
+                                            </div>
+                                        </dxi-column>
+                                        <dxi-column dataField="nivelEstudio" dataType="text" caption="Nivel de estudio"></dxi-column>
+                                        <dxi-column dataField="titulo" dataType="text" caption="Título"></dxi-column>
+                                        <dxi-column dataField="institucion" dataType="text" caption="Institución Educativa"></dxi-column>
+                                        <dxi-column dataField="estatus" dataType="text"></dxi-column>
+                                        <dxi-column dataField="cedula" dataType="text" caption="Cédula Profesional"></dxi-column>                                        
+                                    </dx-data-grid>
+                                    <dx-button id="addBtn" class="btn btn-primary" (onClick)="nextTab()" text="Siguiente"></dx-button>
+                                    <dx-button text="Cancelar" class="btn btn-secondary" (onClick)="cancelarPrinc()"></dx-button>
+                                </div>
+
+                                <dx-popup
+                                    title="Editar estudio"
+                                    [showTitle]="true"
+                                    [width]="850"
+                                    [height]="525"
+                                    position='center'
+                                    [dragEnabled]="false"
+                                    [hideOnOutsideClick]="false"
+                                    [showCloseButton]="false"
+                                    [(visible)]="EditarEstudio"
+                                >
+                                    <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+                                    </dxo-position>
+                                    <form [formGroup]="editarEstudio" (ngSubmit)="estudioPut(editarEstudio.value)">
+                                        <div class="container">
+                                            <div class="form_group row">
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="nivelEstudio">Nivel de estudio:</label>
+                                                    <input type="text" id="nivelEstudio" formControlName="nivelEstudio">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="titulo">Titulo:</label>
+                                                    <input type="text" id="titulo" formControlName="titulo">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="institucion">Institución Educativa:</label>
+                                                    <input type="texto" id="institucion" formControlName="institucion">
+                                                </div> 
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="estatus">Estatus:</label>
+                                                    <input type="texto" id="estatus" formControlName="estatus">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="cedula">Cédula Profesional:</label>
+                                                    <input type="texto" id="cedula" formControlName="cedula">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3" style="display: none;">
+                                                    <label for="colaborador">Colaborador:</label>
+                                                    <input type="number" id="colaborador" formControlName="colaborador">
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                        <button type="button" class="btn btn-secondary" (click)="cancelarAgregar()">Cancelar</button>
+                                    </form>
+                                </dx-popup>
+
+                                <!-- Agregar estudio -->
+                                <dx-popup
+                                    title="Agregar estudio"
+                                    [showTitle]="true"
+                                    [width]="850"
+                                    [height]="525"
+                                    position='center'
+                                    [dragEnabled]="false"
+                                    [hideOnOutsideClick]="false"
+                                    [showCloseButton]="false"
+                                    [(visible)]="AgregarEstudio"
+                                >
+                                    <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+                                    </dxo-position>
+                                    <form [formGroup]="agregarEstudio" (ngSubmit)="nuevoEstudio(agregarEstudio.value)">
+                                        <div class="container">
+                                            <div class="form_group row">
+                                                <div class="form-control">
+                                                    <label for="id">Id:</label>
+                                                    <input type="number" id="id" formControlName="id" readonly>
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="nivelEstudio">Nivel de estudio:</label>
+                                                    <input type="text" id="nivelEstudio" formControlName="nivelEstudio">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="titulo">Titulo:</label>
+                                                    <input type="text" id="titulo" formControlName="titulo">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="institucion">Institución Educativa:</label>
+                                                    <input type="texto" id="institucion" formControlName="institucion">
+                                                </div> 
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="estatus">Estatus:</label>
+                                                    <input type="texto" id="estatus" formControlName="estatus">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="cedula">Cédula Profesional:</label>
+                                                    <input type="texto" id="cedula" formControlName="cedula">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3" style="display: none;">
+                                                    <label for="colaborador">Colaborador:</label>
+                                                    <input type="number" id="colaborador" formControlName="colaborador">
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                        <button type="button" class="btn btn-secondary" (click)="cancelarAgregar()">Cancelar</button>
+                                    </form>
+                                </dx-popup>
+
+                            <!-- Eliminar estudio -->
+                                <dx-popup
+                                    [showTitle]="false"
+                                    [width]="350"
+                                    [height]="200"
+                                    position='center'
+                                    [dragEnabled]="false"
+                                    [hideOnOutsideClick]="false"
+                                    [showCloseButton]="false"
+                                    [(visible)]="deleteEstudio"
+                                >
+                                    <div class="confirm-dialog">
+                                        <div class="message">¿Estás seguro de que deseas eliminar este estudio?</div>
+                                        <div class="buttons">
+                                            <dx-button text="Cancelar" class="btn btn-default" (onClick)="cancelarEliminar()"></dx-button>
+                                            <dx-button text="Eliminar" class="btn btn-danger" (onClick)="confirmarEliminacion('deleteEstudio')"></dx-button>
+                                        </div>
+                                    </div>
+                                </dx-popup>
+                            </mat-tab>
+                            <mat-tab label="Puestos">
+                                <div class="puestos">
+                                    <dx-button icon="add" id="addBtn" class="addButton" (onClick)="puestoForm()" text="Agregar"></dx-button><br><br>
+                                    <dx-data-grid
+                                        id="gridContainer"
+                                        [keyExpr]="'id'"
+                                        [dataSource]="puestos"
+                                        [width]="'100%'"
+                                        [showBorders]="true"
+                                        [rowAlternationEnabled]="true"
+                                        [allowColumnResizing]="true"
+                                        [columnHidingEnabled]="true"
+                                        [repaintChangesOnly]="true"
+                                    >
+
+                                    <dxo-paging [pageSize]="5"></dxo-paging>
+
+                                    <dxo-pager
+                                        [visible]="true"
+                                        [showNavigationButtons]="showNavButtons">
+                                    </dxo-pager>
+
+                                        <dxi-column dataField="id" cellTemplate="cellTemplate" width="auto" caption="Acciones" alignment="center" [allowSorting]="false" sortOrder="asc">
+                                            <div *dxTemplate="let data of 'cellTemplate'">
+                                                <div>
+                                                    <dx-button icon="trash" class="trashButton" (onClick)="eliminarPuesto(data.data.id)"></dx-button>
+                                                </div>
+                                            </div>
+                                        </dxi-column>
+                                        <dxi-column dataField="puestoNombre" dataType="text" caption="Puesto"></dxi-column>
+                                        <dxi-column dataField="puestoSuperior" dataType="text" width="auto" caption="Puesto Superior"></dxi-column>
+                                        <dxi-column dataField="fechaAsignacion" dataType="date"></dxi-column>
+                                        <dxi-column dataField="asignadoPor" dataType="texto" caption="Asignado Por"></dxi-column>
+                                        <dxi-column dataField="antiguedad" dataType="texto" caption="Antiguedad"></dxi-column>
+                                    </dx-data-grid>
+                                    <dx-button id="addBtn" class="btn btn-primary" (onClick)="nextTab()" (onClick)="cancelarPrinc()" text="Guardar"></dx-button>
+                                    <dx-button text="Cancelar" class="btn btn-secondary" (onClick)="cancelarPrinc()"></dx-button>
+
+
+                                    <dx-popup
+                                    title="Agregar puesto"
+                                    [showTitle]="true"
+                                    [width]="850"
+                                    [height]="525"
+                                    position='center'
+                                    [dragEnabled]="false"
+                                    [hideOnOutsideClick]="false"
+                                    [showCloseButton]="false"
+                                    [(visible)]="AgregarPuesto"
+                                >
+                                    <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+                                    </dxo-position>
+                                    <form [formGroup]="agregarPuesto" (ngSubmit)="nuevoPuesto(agregarPuesto.value)">
+                                        <div class="container">
+                                            <div class="form_group row">
+                                                <div class="form-control">
+                                                    <label for="id">Id:</label>
+                                                    <input type="number" id="id" formControlName="id" readonly>
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="puestoNombre">Puesto:</label>
+                                                    <input type="text" id="puestoNombre" formControlName="puestoNombre">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="puestoSuperior">Puesto Superior:</label>
+                                                    <input type="text" id="puestoSuperior" formControlName="puestoSuperior">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="fechaAsignacion">Fecha de asignación:</label>
+                                                    <input type="date" id="fechaAsignacion" formControlName="fechaAsignacion">
+                                                </div> 
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="asignadoPor">Asignado Por:</label>
+                                                    <input type="text" id="asignadoPor" formControlName="asignadoPor">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3">
+                                                    <label for="antiguedad">Antiguedad:</label>
+                                                    <input type="text" id="antiguedad" formControlName="antiguedad">
+                                                </div>
+                                                <div class="form-control col-lg-3 col-md-3" style="display: none;">
+                                                    <label for="colaboradores">Colaborador:</label>
+                                                    <input type="number" id="colaborador" formControlName="colaborador">
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                        <button type="button" class="btn btn-secondary" (click)="cancelarAgregar()">Cancelar</button>
+                                    </form>  
+                                </dx-popup>
+
+                                <dx-popup
+                                [showTitle]="false"
+                                [width]="350"
+                                [height]="200"
+                                position='center'
+                                [dragEnabled]="false"
+                                [hideOnOutsideClick]="false"
+                                [showCloseButton]="false"
+                                [(visible)]="deletePuesto"
+                            >
+                                <div class="confirm-dialog">
+                                    <div class="message">¿Estás seguro de que deseas eliminar este puesto?</div>
+                                    <div class="buttons">
+                                        <dx-button text="Cancelar" class="btn btn-default" (onClick)="cancelarEliminar()"></dx-button>
+                                        <dx-button text="Eliminar" class="btn btn-danger" (onClick)="confirmarEliminacion('deletePuesto')"></dx-button>
+                                    </div>
+                                </div>
+                            </dx-popup>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </dx-popup>
+                    <dx-popup
+                        [showTitle]="false"
+                        [width]="350"
+                        [height]="200"
+                        position='center'
+                        [dragEnabled]="false"
+                        [hideOnOutsideClick]="false"
+                        [showCloseButton]="false"
+                        [(visible)]="deleteColaborador"
+                    >
+                        <div class="confirm-dialog">
+                            <div class="message">¿Estás seguro de que deseas eliminar este colaborador?</div>
+                            <div class="buttons">
+                                <dx-button text="Cancelar" class="btn btn-default" (onClick)="cancelarPrinc()"></dx-button>
+                                <dx-button text="Eliminar" class="btn btn-danger" (onClick)="confirmarEliminacion('deleteColaborador')"></dx-button>
+                            </div>
+                        </div>
+                    </dx-popup>
+                </div>
+            </div>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

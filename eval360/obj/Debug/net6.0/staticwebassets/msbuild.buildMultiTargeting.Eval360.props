@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Eval360.props" />
+</Project>
