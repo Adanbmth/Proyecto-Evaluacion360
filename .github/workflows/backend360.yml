@@ -34,17 +34,18 @@ jobs:
         working-directory: ./eval360
         run: dotnet publish -c Release -o ${{ github.workspace }}/eval360/publish
           
-      - name: Configure Git
+      - name: Setup Heroku
+        run: |
+          echo "machine api.heroku.com login ${{ secrets.HEROKU_API_KEY }} password ${{ secrets.HEROKU_API_KEY }}" > ~/.netrc
+          echo "machine git.heroku.com login ${{ secrets.HEROKU_API_KEY }} password ${{ secrets.HEROKU_API_KEY }}" >> ~/.netrc
+          heroku git:remote -a back360
+
+      - name: Deploy to Heroku
         run: |
           cd ${{ github.workspace }}/eval360/publish
           git init
           git config user.email "adan441@hotmail.com"
           git config user.name "Adanbmth"
-          git remote add heroku https://git.heroku.com/back360.git
-          
-      - name: Deploy to Heroku
-        run: |
-          cd ${{ github.workspace }}/eval360/publish
           git add .
           git commit -m "Deploying to Heroku"
           git push -f heroku HEAD:main
