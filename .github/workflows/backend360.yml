@@ -8,45 +8,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          dotnet-version: '8.0.202'  # Usa la versión correspondiente
-
-      - name: Restore dependencies
-        working-directory: ./eval360
-        run: dotnet restore
-
-      - name: Build
-        working-directory: ./eval360
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Run tests
-        working-directory: ./eval360
-        run: dotnet test --no-restore --verbosity normal
-
-      - name: Publish
-        working-directory: ./eval360
-        run: dotnet publish -c Release -o ${{ github.workspace }}/eval360/publish
-          
-      - name: Setup Heroku
-        run: |
-          echo "machine api.heroku.com login ${{ secrets.HEROKU_API_KEY }} password ${{ secrets.HEROKU_API_KEY }}" > ~/.netrc
-          echo "machine git.heroku.com login ${{ secrets.HEROKU_API_KEY }} password ${{ secrets.HEROKU_API_KEY }}" >> ~/.netrc
-          heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
-
-      - name: Deploy to Heroku
-        run: |
-          cd ${{ github.workspace }}/eval360/publish
-          git init
-          git config user.email "adan441@hotmail.com"
-          git config user.name "Adanbmth"
-          git add .
-          git commit -m "Deploying to Heroku"
-          git remote add heroku https://git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
-          git push -f heroku HEAD:main
+          heroku_api_key: ${{ secrets.TU_API_KEY_DE_HEROKU }}
+          heroku_app_name: "back360"  # Reemplaza "store-demo-api2" con el nombre de tu aplicación Heroku
+          heroku_email: ${{ secrets.TU_EMAIL_DE_HEROKU }}
+          usedocker: true
