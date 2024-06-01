@@ -34,9 +34,6 @@ jobs:
         working-directory: ./eval360
         run: dotnet publish -c Release -o ${{ github.workspace }}/eval360/publish
 
-      - name: Create Procfile
-        run: echo "web: dotnet Eval360.dll" > ${{ github.workspace }}/eval360/publish/Procfile
-
       - name: Deploy to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
