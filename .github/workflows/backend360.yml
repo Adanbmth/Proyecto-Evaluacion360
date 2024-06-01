@@ -12,35 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          dotnet-version: '8.0.202'  # Usa la versión correspondiente
-
-      - name: Restore dependencies
-        working-directory: ./eval360
-        run: dotnet restore
-
-      - name: Build
-        working-directory: ./eval360
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Run tests
-        working-directory: ./eval360
-        run: dotnet test --no-restore --verbosity normal
-
-      - name: Publish
-        working-directory: ./eval360
-        run: dotnet publish -c Release -o ${{ github.workspace }}/eval360/publish
-
-      - name: Create Procfile
-        run: echo "web: dotnet Eval360.dll" > ${{ github.workspace }}/eval360/publish/Procfile
-
-      - name: Deploy to Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
-        run: |
-          cd ${{ github.workspace }}/eval360/publish
-          git init
-          heroku git:remote -a $HEROKU_APP_NAME
-          git add .
-          git commit -am "Deploying to Heroku"
-          git push -f heroku HEAD:main
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "back360"  # Reemplaza "store-demo-api2" con el nombre de tu aplicación Heroku
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          usedocker: true
