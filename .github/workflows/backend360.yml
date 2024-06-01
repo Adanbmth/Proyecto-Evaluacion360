@@ -43,7 +43,7 @@ jobs:
           git init
           git config user.email "adan441@hotmail.com"
           git config user.name "Adanbmth"
-          heroku git:remote -a $HEROKU_APP_NAME
+          heroku git:remote -a back360
           git add .
           git commit -m "Deploying to Heroku"
           git push -f heroku HEAD:main
