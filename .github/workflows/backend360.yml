@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          heroku_api_key: ${{ secrets.TU_API_KEY_DE_HEROKU }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "back360"  # Reemplaza "store-demo-api2" con el nombre de tu aplicación Heroku
-          heroku_email: ${{ secrets.TU_EMAIL_DE_HEROKU }}
+          heroku_email: ${{ secrets.EMAIL_HEROKU }}
           usedocker: true
