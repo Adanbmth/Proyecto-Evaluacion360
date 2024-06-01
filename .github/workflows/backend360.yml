@@ -14,5 +14,5 @@ jobs:
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "back360"  # Reemplaza "store-demo-api2" con el nombre de tu aplicación Heroku
-          heroku_email: ${{ secrets.EMAIL_HEROKU }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
           usedocker: true
