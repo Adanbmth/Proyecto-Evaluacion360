@@ -38,12 +38,12 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
-          run: |
-            cd ${{ github.workspace }}/eval360/publish
-            git init
-            git config user.email "adan441@hotmail.com"
-            git config user.name "Adanbmth"
-            heroku git:remote -a $HEROKU_APP_NAME
-            git add .
-            git commit -m "Deploying to Heroku"
-            git push -f heroku HEAD:main
+        run: |
+          cd ${{ github.workspace }}/eval360/publish
+          git init
+          git config user.email "adan441@hotmail.com"
+          git config user.name "Adanbmth"
+          heroku git:remote -a $HEROKU_APP_NAME
+          git add .
+          git commit -m "Deploying to Heroku"
+          git push -f heroku HEAD:main
