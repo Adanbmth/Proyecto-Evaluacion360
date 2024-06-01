@@ -10,33 +10,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '8.0.202'  # Usa la versión correspondiente
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.202'  # Usa la versión correspondiente
 
-    - name: Restore dependencies
-      working-directory: ./eval360
-      run: dotnet restore
+      - name: Restore dependencies
+        working-directory: ./eval360
+        run: dotnet restore
 
-    - name: Build
-      working-directory: ./eval360
-      run: dotnet build --configuration Release --no-restore
+      - name: Build
+        working-directory: ./eval360
+        run: dotnet build --configuration Release --no-restore
 
-    - name: Run tests
-      working-directory: ./eval360
-      run: dotnet test --no-restore --verbosity normal
+      - name: Run tests
+        working-directory: ./eval360
+        run: dotnet test --no-restore --verbosity normal
 
-    - name: Publish
-      working-directory: ./eval360
-      run: dotnet publish -c Release -o ${{ github.workspace }}/eval360/publish
+      - name: Publish
+        working-directory: ./eval360
+        run: dotnet publish -c Release -o ${{ github.workspace }}/eval360/publish
 
-    - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: backend360
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ github.workspace }}/eval360/publish
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+        run: |
+          cd ${{ github.workspace }}/eval360/publish
+          git init
+          heroku git:remote -a $HEROKU_APP_NAME
+          git add .
+          git commit -am "Deploying to Heroku"
+          git push -f heroku HEAD:main
