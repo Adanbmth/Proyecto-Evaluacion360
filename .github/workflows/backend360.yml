@@ -33,11 +33,6 @@ jobs:
       - name: Publish
         working-directory: ./eval360
         run: dotnet publish -c Release -o ${{ github.workspace }}/eval360/publish
-
-      - name: Deploy to Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
           
       - name: Configure Git
         run: |
