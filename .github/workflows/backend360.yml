@@ -38,7 +38,7 @@ jobs:
         run: |
           echo "machine api.heroku.com login ${{ secrets.HEROKU_API_KEY }} password ${{ secrets.HEROKU_API_KEY }}" > ~/.netrc
           echo "machine git.heroku.com login ${{ secrets.HEROKU_API_KEY }} password ${{ secrets.HEROKU_API_KEY }}" >> ~/.netrc
-          heroku git:remote -a back360
+          heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
 
       - name: Deploy to Heroku
         run: |
@@ -48,4 +48,5 @@ jobs:
           git config user.name "Adanbmth"
           git add .
           git commit -m "Deploying to Heroku"
+          git remote add heroku https://git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
           git push -f heroku HEAD:main
