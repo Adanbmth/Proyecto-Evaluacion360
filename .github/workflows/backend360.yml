@@ -44,7 +44,9 @@ jobs:
         run: |
           cd ${{ github.workspace }}/eval360/publish
           git init
+          git config user.email "adan441@hotmail.com"
+          git config user.name "Adanbmth"
           heroku git:remote -a $HEROKU_APP_NAME
           git add .
-          git commit -am "Deploying to Heroku"
+          git commit -m "Deploying to Heroku"
           git push -f heroku HEAD:main
