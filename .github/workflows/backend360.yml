@@ -8,13 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
         with:
           dotnet-version: '8.0.202'  # Usa la versión correspondiente
 
@@ -44,9 +40,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/eval360/publish
           git init
-          git config user.email "adan441@hotmail.com"
-          git config user.name "Adanbmth"
           heroku git:remote -a $HEROKU_APP_NAME
           git add .
-          git commit -m "Deploying to Heroku"
+          git commit -am "Deploying to Heroku"
           git push -f heroku HEAD:main
