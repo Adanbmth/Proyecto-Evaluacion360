@@ -40,7 +40,7 @@ jobs:
           git init
           git config user.email "adan441@hotmail.com"
           git config user.name "Adanbmth"
-          git remote add heroku https://git.heroku.com/back360
+          git remote add heroku https://git.heroku.com/back360.git
           
       - name: Deploy to Heroku
         run: |
