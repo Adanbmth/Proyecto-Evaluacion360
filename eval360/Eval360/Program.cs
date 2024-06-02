@@ -9,6 +9,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var envDatabaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+if (!string.IsNullOrEmpty(envDatabaseUrl))
+{
+    var databaseUri = new Uri(envDatabaseUrl);
+    var userInfo = databaseUri.UserInfo.Split(':');
+    var connectionString = new Npgsql.NpgsqlConnectionStringBuilder
+    {
+        Host = databaseUri.Host,
+        Port = databaseUri.Port,
+        Username = userInfo[0],
+        Password = userInfo[1],
+        Database = databaseUri.LocalPath.TrimStart('/')
+    }.ToString();
+    
+    builder.Configuration["ConnectionStrings:PostgreConnection"] = connectionString;
+}
+
 var connectionString = builder.Configuration.GetConnectionString("PostgreConnection");
 builder.Services.AddDbContext<AplicationContext>(options =>
     options.UseNpgsql(connectionString));
@@ -28,7 +46,7 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
-//Controladores para las escalas de evaluación
+//Controladores para las escalas de evaluaciï¿½n
 
 app.MapGet("/ListarEscalas/", async (AplicationContext db) => await db.Escalas.ToListAsync());
 
