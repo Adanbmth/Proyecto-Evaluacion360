@@ -46,7 +46,7 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
-//Controladores para las escalas de evaluaci�n
+//Controladores para las escalas de evaluacion
 
 app.MapGet("/ListarEscalas/", async (AplicationContext db) => await db.Escalas.ToListAsync());
 
