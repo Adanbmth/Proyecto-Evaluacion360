@@ -14,7 +14,7 @@ import { ListaPuesto } from 'src/app/modelos/puestos.interface';
 })
 export class ApiService {
 
-  url:string = "https://localhost:7084/";
+  url:string = "https://back360-c8a156c10162.herokuapp.com/";
 
   constructor(private http:HttpClient) { }
 
