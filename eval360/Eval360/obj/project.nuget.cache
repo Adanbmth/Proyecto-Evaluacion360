@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zOWTdI1AH6rPykevhsXKAcAL7J2JjwOlkANBuanyJnNr8nQllsZwbxTcmpxt5qWa5NSRLWfrdQ4BL+TjpV5fZw==",
+  "dgSpecHash": "dM7gDq8OmFCLDoV6rZoS5sED90vucojQ2+qr1UTWm9Ha2WXYInH/mql4WVvL7OjUs3iSHmfvTdWDwQ8fwkpu+w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\adan4\\source\\repos\\Eval360\\Eval360\\Eval360.csproj",
+  "projectFilePath": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Eval360.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\adan4\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\adan4\\.nuget\\packages\\microsoft.aspnetcore.diagnostics.entityframeworkcore\\6.0.22\\microsoft.aspnetcore.diagnostics.entityframeworkcore.6.0.22.nupkg.sha512",

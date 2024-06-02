@@ -3,14 +3,6 @@
   "WorkspaceRootPath": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{855E0FDA-9C87-4E55-9D6C-189E315EABE6}|Eval360\\Eval360.csproj|d:\\descargas\\web developer\\angular\\evaluacion360\\eval360\\eval360\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{855E0FDA-9C87-4E55-9D6C-189E315EABE6}|Eval360\\Eval360.csproj|solutionrelative:eval360\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{855E0FDA-9C87-4E55-9D6C-189E315EABE6}|Eval360\\Eval360.csproj|d:\\descargas\\web developer\\angular\\evaluacion360\\eval360\\eval360\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{855E0FDA-9C87-4E55-9D6C-189E315EABE6}|Eval360\\Eval360.csproj|solutionrelative:eval360\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{855E0FDA-9C87-4E55-9D6C-189E315EABE6}|Eval360\\Eval360.csproj|d:\\descargas\\web developer\\angular\\evaluacion360\\eval360\\eval360\\models\\puesto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{855E0FDA-9C87-4E55-9D6C-189E315EABE6}|Eval360\\Eval360.csproj|solutionrelative:eval360\\models\\puesto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -25,10 +17,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{855E0FDA-9C87-4E55-9D6C-189E315EABE6}|Eval360\\Eval360.csproj|d:\\descargas\\web developer\\angular\\evaluacion360\\eval360\\eval360\\models\\estudio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{855E0FDA-9C87-4E55-9D6C-189E315EABE6}|Eval360\\Eval360.csproj|solutionrelative:eval360\\models\\estudio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{855E0FDA-9C87-4E55-9D6C-189E315EABE6}|Eval360\\Eval360.csproj|d:\\descargas\\web developer\\angular\\evaluacion360\\eval360\\eval360\\context\\aplicationcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{855E0FDA-9C87-4E55-9D6C-189E315EABE6}|Eval360\\Eval360.csproj|solutionrelative:eval360\\context\\aplicationcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{855E0FDA-9C87-4E55-9D6C-189E315EABE6}|Eval360\\Eval360.csproj|d:\\descargas\\web developer\\angular\\evaluacion360\\eval360\\eval360\\models\\criterio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -55,31 +43,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\appsettings.json",
-              "RelativeDocumentMoniker": "Eval360\\appsettings.json",
-              "ToolTip": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\appsettings.json",
-              "RelativeToolTip": "Eval360\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAtAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-06-01T01:17:50.36Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "Puesto.cs",
               "DocumentMoniker": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Models\\Puesto.cs",
               "RelativeDocumentMoniker": "Eval360\\Models\\Puesto.cs",
               "ToolTip": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Models\\Puesto.cs",
               "RelativeToolTip": "Eval360\\Models\\Puesto.cs",
-              "ViewState": "AQIAAAcAAAAAAAAAAAAQwBEAAAAFAAAA",
+              "ViewState": "AQIAAAcAAAAAAAAAAAAQwBIAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-23T16:57:33.881Z"
+              "WhenOpened": "2024-05-23T16:57:33.881Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "Horario.cs",
               "DocumentMoniker": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Models\\Horario.cs",
               "RelativeDocumentMoniker": "Eval360\\Models\\Horario.cs",
@@ -91,7 +67,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "Estudio.cs",
               "DocumentMoniker": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Models\\Estudio.cs",
               "RelativeDocumentMoniker": "Eval360\\Models\\Estudio.cs",
@@ -104,18 +80,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Program.cs",
-              "RelativeDocumentMoniker": "Eval360\\Program.cs",
-              "ToolTip": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Program.cs",
-              "RelativeToolTip": "Eval360\\Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-14T08:19:48.283Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "Colaborador.cs",
               "DocumentMoniker": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Models\\Colaborador.cs",
               "RelativeDocumentMoniker": "Eval360\\Models\\Colaborador.cs",
@@ -127,7 +91,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 5,
               "Title": "Competencia.cs",
               "DocumentMoniker": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Models\\Competencia.cs",
               "RelativeDocumentMoniker": "Eval360\\Models\\Competencia.cs",
@@ -139,19 +103,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "AplicationContext.cs",
-              "DocumentMoniker": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Context\\AplicationContext.cs",
-              "RelativeDocumentMoniker": "Eval360\\Context\\AplicationContext.cs",
-              "ToolTip": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Context\\AplicationContext.cs",
-              "RelativeToolTip": "Eval360\\Context\\AplicationContext.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAAwBMAAAA5AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-23T20:57:48.352Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 4,
               "Title": "Criterio.cs",
               "DocumentMoniker": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Models\\Criterio.cs",
               "RelativeDocumentMoniker": "Eval360\\Models\\Criterio.cs",
@@ -163,7 +115,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 6,
               "Title": "EscalaEvaluacion.cs",
               "DocumentMoniker": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Models\\EscalaEvaluacion.cs",
               "RelativeDocumentMoniker": "Eval360\\Models\\EscalaEvaluacion.cs",

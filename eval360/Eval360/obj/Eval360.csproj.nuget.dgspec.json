@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\adan4\\source\\repos\\Eval360\\Eval360\\Eval360.csproj": {}
+    "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Eval360.csproj": {}
   },
   "projects": {
-    "C:\\Users\\adan4\\source\\repos\\Eval360\\Eval360\\Eval360.csproj": {
+    "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Eval360.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adan4\\source\\repos\\Eval360\\Eval360\\Eval360.csproj",
+        "projectUniqueName": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Eval360.csproj",
         "projectName": "Eval360",
-        "projectPath": "C:\\Users\\adan4\\source\\repos\\Eval360\\Eval360\\Eval360.csproj",
+        "projectPath": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\Eval360.csproj",
         "packagesPath": "C:\\Users\\adan4\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adan4\\source\\repos\\Eval360\\Eval360\\obj\\",
+        "outputPath": "D:\\Descargas\\Web Developer\\Angular\\Evaluacion360\\eval360\\Eval360\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\adan4\\AppData\\Roaming\\NuGet\\NuGet.Config",
