@@ -9,13 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var envDatabaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+var connectionString = builder.Configuration.GetConnectionString("PostgreConnection");
+builder.Services.AddDbContext<AplicationContext>(options =>
+    options.UseNpgsql(connectionString));
 
+var envDatabaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 if (!string.IsNullOrEmpty(envDatabaseUrl))
 {
     var databaseUri = new Uri(envDatabaseUrl);
     var userInfo = databaseUri.UserInfo.Split(':');
-    var connectionString = new Npgsql.NpgsqlConnectionStringBuilder
+    connectionString = new NpgsqlConnectionStringBuilder
     {
         Host = databaseUri.Host,
         Port = databaseUri.Port,
@@ -23,13 +26,7 @@ if (!string.IsNullOrEmpty(envDatabaseUrl))
         Password = userInfo[1],
         Database = databaseUri.LocalPath.TrimStart('/')
     }.ToString();
-    
-    builder.Configuration["ConnectionStrings:PostgreConnection"] = connectionString;
 }
-
-var connectionString = builder.Configuration.GetConnectionString("PostgreConnection");
-builder.Services.AddDbContext<AplicationContext>(options =>
-    options.UseNpgsql(connectionString));
 
 builder.Services.AddCors(policyBuilder => policyBuilder.AddDefaultPolicy(policy => policy.WithOrigins("*").AllowAnyHeader().AllowAnyMethod()));
 
