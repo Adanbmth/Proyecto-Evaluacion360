@@ -13,21 +13,6 @@ var connectionString = builder.Configuration.GetConnectionString("PostgreConnect
 builder.Services.AddDbContext<AplicationContext>(options =>
     options.UseNpgsql(connectionString));
 
-var envDatabaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-if (!string.IsNullOrEmpty(envDatabaseUrl))
-{
-    var databaseUri = new Uri(envDatabaseUrl);
-    var userInfo = databaseUri.UserInfo.Split(':');
-    connectionString = new NpgsqlConnectionStringBuilder
-    {
-        Host = databaseUri.Host,
-        Port = databaseUri.Port,
-        Username = userInfo[0],
-        Password = userInfo[1],
-        Database = databaseUri.LocalPath.TrimStart('/')
-    }.ToString();
-}
-
 builder.Services.AddCors(policyBuilder => policyBuilder.AddDefaultPolicy(policy => policy.WithOrigins("*").AllowAnyHeader().AllowAnyMethod()));
 
 var app = builder.Build();
